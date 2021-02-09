@@ -1,0 +1,13 @@
+.row{
+
+    padding:50px;
+}
+
+.navbar>.container-fluid{
+    display: block;
+}
+
+.btn{
+    float:right;
+    margin-right: 10px;
+}

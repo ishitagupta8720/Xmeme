@@ -1,0 +1,18 @@
+.abc{
+
+    padding:50px;
+}
+
+form{
+    width:80%;
+    padding-top: 20px;
+}
+
+.navbar>.container-fluid{
+    display: block;
+}
+
+.btn{
+    float:right;
+    margin-right: 10px;
+}
