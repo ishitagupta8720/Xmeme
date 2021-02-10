@@ -47,7 +47,7 @@ const swaggerOptions = {
 const specs = swaggerJSDoc(swaggerOptions)
 
 //swaggerApp.use('/swagger-ui', swaggerUI.serve, swaggerUI.setup(specs));
-app.use('/swagger-ui', swaggerUI.serve, swaggerUI.setup(specs));
+
 
 
 /**
@@ -352,7 +352,7 @@ app.patch('/memes/:id', async (req, res) => {
    }
 })
 
-
+app.use('/swagger-ui', swaggerUI.serve, swaggerUI.setup(specs));
 
 app.use((req, res) =>{
     res.status(404).send('404 Not Found');
