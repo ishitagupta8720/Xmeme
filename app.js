@@ -5,7 +5,7 @@ const mongoose = require('mongoose');
 const urlValidation = require('valid-url');
 
 
-if (process.env.NODE_ENV !=="production"){
+if (process.env.node_env !=="production"){
   require('dotenv').config();
 }
 
