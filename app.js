@@ -354,7 +354,7 @@ const swaggerOptions = {
           url: "http://localhost:8081"
       },
     {
-      url: "https://mysterious-hamlet-73374.herokuapp.com/"
+      url: "https://mysterious-hamlet-73374.herokuapp.com/memes/all"
     }]
   },
   apis: ['app.js']
