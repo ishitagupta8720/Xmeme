@@ -3,7 +3,9 @@ const app = express();
 const path = require('path');
 const mongoose = require('mongoose');
 const urlValidation = require('valid-url');
-
+const swaggerJSDoc = require('swagger-jsdoc')
+const swaggerUI = require('swagger-ui-express')
+const cors = require('cors')
 
 if (process.env.NODE_ENV !=="production"){
   require('dotenv').config();
@@ -11,40 +13,34 @@ if (process.env.NODE_ENV !=="production"){
 
 const dbUrl = process.env.DB_URL || 'mongodb://localhost:27017/Collection';
 
-const swaggerJSDoc = require('swagger-jsdoc')
-const swaggerUI = require('swagger-ui-express')
-const cors = require('cors')
+
 //const swaggerApp = express()
-app.use(cors())
+
 //swaggerApp.use(cors())
 
 
 //const swaggerPORT = process.env.PORT || 8080
 
 
-const swaggerOptions = {
-  definition: {
-      openapi: '3.0.3',
-      info: {
-          title: 'XMeme',
-          version: '1.0.0',
-          description: 'Simple CRUD meme application',
-          'contact': {
-              'name': 'Ishita Gupta',
-              'email': 'ishitagupta8720@gmail.com'
-          },
-      },
-      servers: [{
-          url: "http://localhost:8081"
-      },
-    {
-      url: "https://mysterious-hamlet-73374.herokuapp.com/memes/all"
-    }]
-  },
-  apis: ['app.js']
-}
 
-const specs = swaggerJSDoc(swaggerOptions)
+const Meme = require('./models/memes');
+
+mongoose.connect(dbUrl, { useNewUrlParser: true, useUnifiedTopology: true })
+    .then(() => {
+        console.log("MONGO CONNECTION OPEN!!!")
+    })
+    .catch(err => {
+        console.log("OH NO MONGO CONNECTION ERROR!!!!")
+        console.log(err)
+    })
+
+app.set('views', path.join(__dirname, 'views'));
+app.set('view engine', 'ejs');
+
+
+
+
+
 
 //swaggerApp.use('/swagger-ui', swaggerUI.serve, swaggerUI.setup(specs));
 
@@ -74,19 +70,8 @@ const specs = swaggerJSDoc(swaggerOptions)
  *      example: ''
  */
 
-const Meme = require('./models/memes');
 
-mongoose.connect(dbUrl, { useNewUrlParser: true, useUnifiedTopology: true })
-    .then(() => {
-        console.log("MONGO CONNECTION OPEN!!!")
-    })
-    .catch(err => {
-        console.log("OH NO MONGO CONNECTION ERROR!!!!")
-        console.log(err)
-    })
-
-app.set('views', path.join(__dirname, 'views'));
-app.set('view engine', 'ejs');
+app.use(cors())
 
 
 app.use(express.urlencoded({ extended: true }));
@@ -351,6 +336,31 @@ app.patch('/memes/:id', async (req, res) => {
     res.status(404).send('404 Not found');
    }
 })
+
+
+const swaggerOptions = {
+  definition: {
+      openapi: '3.0.3',
+      info: {
+          title: 'XMeme',
+          version: '1.0.0',
+          description: 'Simple CRUD meme application',
+          'contact': {
+              'name': 'Ishita Gupta',
+              'email': 'ishitagupta8720@gmail.com'
+          },
+      },
+      servers: [{
+          url: "http://localhost:8081"
+      },
+    {
+      url: "https://mysterious-hamlet-73374.herokuapp.com/memes/all"
+    }]
+  },
+  apis: ['app.js']
+}
+
+const specs = swaggerJSDoc(swaggerOptions)
 
 app.use('/swagger-ui', swaggerUI.serve, swaggerUI.setup(specs));
 
