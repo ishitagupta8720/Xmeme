@@ -363,4 +363,4 @@ app.listen(port, () => {
     console.log("APP IS LISTENING ON PORT 8081!")
 })
 
-swaggerApp.listen(swaggerPORT)
+//swaggerApp.listen(swaggerPORT)
