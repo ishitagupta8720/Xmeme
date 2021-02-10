@@ -11,8 +11,65 @@ if (process.env.NODE_ENV !=="production"){
 
 const dbUrl = process.env.DB_URL || 'mongodb://localhost:27017/Collection';
 
+const swaggerJSDoc = require('swagger-jsdoc')
+const swaggerUI = require('swagger-ui-express')
+const cors = require('cors')
+//const swaggerApp = express()
+app.use(cors())
+//swaggerApp.use(cors())
 
 
+//const swaggerPORT = process.env.PORT || 8080
+
+
+const swaggerOptions = {
+  definition: {
+      openapi: '3.0.3',
+      info: {
+          title: 'XMeme',
+          version: '1.0.0',
+          description: 'Simple CRUD meme application',
+          'contact': {
+              'name': 'Ishita Gupta',
+              'email': 'ishitagupta8720@gmail.com'
+          },
+      },
+      servers: [{
+          url: "http://localhost:8081"
+      }]
+  },
+  apis: ['app.js']
+}
+
+const specs = swaggerJSDoc(swaggerOptions)
+
+//swaggerApp.use('/swagger-ui', swaggerUI.serve, swaggerUI.setup(specs));
+app.use('/swagger-ui', swaggerUI.serve, swaggerUI.setup(specs));
+
+
+/**
+ * @swagger
+ * definitions:
+ *  Meme:
+ *   type: object
+ *   properties:
+ *     name:
+ *      type: string
+ *      description: Name of the author of the meme
+ *      example: 'Manthan Gupta'
+ *     url:
+ *      type: string
+ *      description: URL of meme image
+ *      example: 'https://static.mommypoppins.com/styles/image620x420/s3/school_meme_3_0.jpg'
+ *     caption:
+ *      type: string
+ *      description: Caption for the meme
+ *      example: 'This is a meme'
+ *     upload_time:
+ *      type: Date
+ *      description: Time at which the meme was uploaded by the user
+ *      example: ''
+ */
 
 const Meme = require('./models/memes');
 
@@ -33,7 +90,18 @@ app.use(express.urlencoded({ extended: true }));
 app.use(express.static(path.join(__dirname, 'public')));
 app.use(express.json());
 
-
+/**
+ * @swagger
+ * /:
+ *  get:
+ *   summary: get all memes displayed on the homepage
+ *   description: get all memes displayed on the homepage
+ *   responses:
+ *    200:
+ *     description: success
+ *    500:
+ *     description: error
+ */
 
 app.get('/memes/all', async(req,res) => {
     try{
@@ -44,6 +112,20 @@ app.get('/memes/all', async(req,res) => {
         res.status(404).send('404 Not Found');
     }
 })
+
+//GET request /memes to display all the memes
+/**
+ * @swagger
+ * /memes:
+ *  get:
+ *   summary: get all memes
+ *   description: get all memes
+ *   responses:
+ *    200:
+ *     description: success
+ *    404:
+ *     description: error
+ */
 
 app.get('/memes', async(req,res) => {
     try{
@@ -68,10 +150,42 @@ app.get('/memes', async(req,res) => {
     }
 })
 
+/**
+ * @swagger
+ * /add-meme:
+ *  get:
+ *   summary: render form to post memes
+ *   description: render form to post memes
+ *   responses:
+ *    200:
+ *     description: success
+ *    500:
+ *     description: error
+ */
+
 app.get('/memes/new', (req, res) => {
     res.render('all/new')
 })
 
+/**
+  * @swagger
+  * /memes:
+  *  post:
+  *   summary: create meme
+  *   description: create meme 
+  *   requestBody:
+  *    content:
+  *     application/json:
+  *      schema:
+  *       $ref: '#/definitions/Meme'
+  *   responses:
+  *    200:
+  *     description: meme created succesfully
+  *    404:
+  *     description: URL entered in not valid
+  *    409:
+  *     description: Duplicate POST request
+  */
 
 
 app.post('/memes', async (req, res) => {
@@ -101,6 +215,25 @@ app.post('/memes', async (req, res) => {
     
 })
 
+/**
+  * @swagger
+  * /memes/redirect:
+  *  post:
+  *   summary: create meme and redirect to homepage
+  *   description: create meme and redirect to homepage
+  *   requestBody:
+  *    content:
+  *     application/json:
+  *      schema:
+  *       $ref: '#/definitions/Meme'
+  *   responses:
+  *    200:
+  *     description: meme created succesfully
+  *    409:
+  *     description: Duplicate POST request
+  *    500:
+  *     description: failure in creating meme
+  */
 
 app.post('/memes/posts', async (req, res) => {
   const newMeme = new Meme(req.body);
@@ -144,7 +277,26 @@ app.post('/memes/:id', async (req, res) => {
   }
 })
 
-
+/**
+ * @swagger
+ * /memes/{meme_id}:
+ *  get:
+ *   summary: get meme with meme_id id
+ *   description: get meme with meme_id id
+ *   parameters:
+ *    - in: path
+ *      name: meme_id
+ *      schema:
+ *       type: string
+ *      required: true
+ *      description: id of the meme
+ *      example: 1
+ *   responses:
+ *    200:
+ *     description: success
+ *    404:
+ *     description: error
+ */
 
 app.get('/memes/:id', async (req, res) => {
     const { id } = req.params;
@@ -157,6 +309,28 @@ app.get('/memes/:id', async (req, res) => {
     res.status(404).send('404 Not Found');
   }
 })
+
+
+/**
+ * @swagger
+ * /memes/{meme_id}:
+ *  patch:
+ *   summary: update meme details
+ *   description: update meme details
+ *   parameters:
+ *    - in: path
+ *      name: meme_id
+ *      schema:
+ *       type: string
+ *      required: true
+ *      description: id of the meme
+ *      example: 1
+ *   responses:
+ *    200:
+ *     description: success
+ *    404:
+ *     description: error
+ */
 
 app.patch('/memes/:id', async (req, res) => {
     const { id } = req.params;
@@ -185,3 +359,5 @@ const port = process.env.PORT || 8081;
 app.listen(port, () => {
     console.log("APP IS LISTENING ON PORT 8081!")
 })
+
+swaggerApp.listen(swaggerPORT)
