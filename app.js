@@ -181,7 +181,4 @@ app.use((req, res) =>{
     res.status(404).send('404 Not Found');
 })
 
-const port = process.env.PORT || 8081;
-app.listen(port, () => {
-    console.log("APP IS LISTENING ON PORT 8081!")
-})
+app.listen(process.env.PORT || 8081);
