@@ -98,12 +98,12 @@ app.use(express.json());
 app.get('/memes/all', async(req,res) => {
     try{
     const memes = await Meme.find().sort({ "time": -1 }).limit(100);
-    if(!memes)
+    if(memes.length>0)
     {
-       res.render('all/Nomeme')
+       res.render('all/app', { memes })
     }
     else{
-      res.render('all/app', { memes })
+      res.render('all/Nomeme')
     }
     }
     catch(err){
