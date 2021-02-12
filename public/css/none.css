@@ -1,0 +1,18 @@
+.template{
+    padding-top: 60px;
+    text-align: center;
+}
+
+.template h1{
+   color: darkcyan;
+   padding-top: 20px;
+}
+
+.btn{
+ float:right;
+ margin-right: 10px;
+}
+
+.navbar>.container-fluid{
+    display: block;
+}
