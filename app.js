@@ -247,7 +247,7 @@ try{
   if(urlValidation.isUri(newMeme.url)){
      if(!check){
       await newMeme.save();
-      res.send({"id": newMeme.id});
+      res.redirect(`/memes/all`);
      }
      else
      {
