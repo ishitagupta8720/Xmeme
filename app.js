@@ -57,7 +57,7 @@ app.set('view engine', 'ejs');
  *     name:
  *      type: string
  *      description: Name of the author of the meme
- *      example: 'Manthan Gupta'
+ *      example: 'Ishita Gupta'
  *     url:
  *      type: string
  *      description: URL of meme image
@@ -82,7 +82,7 @@ app.use(express.json());
 
 /**
  * @swagger
- * /:
+ * /memes/all:
  *  get:
  *   summary: get all memes displayed on the homepage
  *   description: get all memes displayed on the homepage
@@ -146,7 +146,7 @@ app.get('/memes', async(req,res) => {
 
 /**
  * @swagger
- * /add-meme:
+ * /memes/new:
  *  get:
  *   summary: render form to post memes
  *   description: render form to post memes
@@ -178,7 +178,7 @@ app.get('/memes/new', (req, res) => {
   *    200:
   *     description: meme created succesfully
   *    404:
-  *     description: URL entered in not valid
+  *     description: Failure in creating meme
   *    409:
   *     description: Duplicate POST request
   */
@@ -213,7 +213,7 @@ app.post('/memes', async (req, res) => {
 
 /**
   * @swagger
-  * /memes/redirect:
+  * /memes/posts:
   *  post:
   *   summary: create meme and redirect to homepage
   *   description: create meme and redirect to homepage
@@ -227,7 +227,7 @@ app.post('/memes', async (req, res) => {
   *     description: meme created succesfully
   *    409:
   *     description: Duplicate POST request
-  *    500:
+  *    404:
   *     description: failure in creating meme
   */
 
