@@ -25,6 +25,8 @@ const dbUrl = process.env.DB_URL || 'mongodb://localhost:27017/Collection';
 
 const Meme = require('./models/memes');
 
+
+//Connecting the mongodb database
 mongoose.connect(dbUrl, { useNewUrlParser: true, useUnifiedTopology: true })
     .then(() => {
         console.log("MONGO CONNECTION OPEN!!!")
@@ -87,10 +89,12 @@ app.use(express.json());
  *   responses:
  *    200:
  *     description: success
- *    500:
+ *    404:
  *     description: error
  */
 
+
+ // Get route to render html to display all the memes
 app.get('/memes/all', async(req,res) => {
     try{
     const memes = await Meme.find().sort({ "time": -1 }).limit(100);
@@ -115,6 +119,8 @@ app.get('/memes/all', async(req,res) => {
  *     description: error
  */
 
+
+ //Get route to send json data back for all the memes
 app.get('/memes', async(req,res) => {
     try{
       const memes = await Meme.find().sort({ "time": 1 }).limit(100);
@@ -151,6 +157,8 @@ app.get('/memes', async(req,res) => {
  *     description: error
  */
 
+
+ //Get route to render frontend to create a new meme
 app.get('/memes/new', (req, res) => {
     res.render('all/new')
 })
@@ -175,7 +183,7 @@ app.get('/memes/new', (req, res) => {
   *     description: Duplicate POST request
   */
 
-
+//Post route to add new meme through curl command
 app.post('/memes', async (req, res) => {
     const newMeme = new Meme(req.body);
     let check = await Meme.exists({ 'name': req.body.name, 'caption': req.body.caption, 'url': req.body.url})
@@ -192,7 +200,7 @@ app.post('/memes', async (req, res) => {
     }
     else
     {
-      res.status(404).send('Url Not found');
+      res.status(404).send('404 Not Found');
     }
   }
   catch(err)
@@ -223,17 +231,26 @@ app.post('/memes', async (req, res) => {
   *     description: failure in creating meme
   */
 
+
+//Post route to add new meme through the frontend
+
 app.post('/memes/posts', async (req, res) => {
   const newMeme = new Meme(req.body);
   let check = await Meme.exists({ 'name': req.body.name, 'caption': req.body.caption, 'url': req.body.url})
 try{
-  if(urlValidation.isUri(newMeme.url) && !check){
+  if(urlValidation.isUri(newMeme.url)){
+     if(!check){
       await newMeme.save();
-      res.redirect(`/memes/all`);
+      res.send({"id": newMeme.id});
+     }
+     else
+     {
+      res.status(409).send('409 Conflict');
+     }
   }
   else
   {
-     throw err;
+    res.status(404).send('404 Not Found');
   }
 }
 catch(err)
@@ -246,8 +263,7 @@ catch(err)
 
 
 
-
-
+//Post route to incrememnt the number of likes for a particular meme
 app.post('/memes/:id', async (req, res) => {
     const { id } = req.params;
   try{
@@ -286,6 +302,8 @@ app.post('/memes/:id', async (req, res) => {
  *     description: error
  */
 
+
+ //Get route to display a specific meme
 app.get('/memes/:id', async (req, res) => {
     const { id } = req.params;
   try{
@@ -320,6 +338,7 @@ app.get('/memes/:id', async (req, res) => {
  *     description: error
  */
 
+ //Patch route to update a specific meme
 app.patch('/memes/:id', async (req, res) => {
     const { id } = req.params;
   try{
