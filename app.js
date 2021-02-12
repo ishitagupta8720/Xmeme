@@ -98,7 +98,13 @@ app.use(express.json());
 app.get('/memes/all', async(req,res) => {
     try{
     const memes = await Meme.find().sort({ "time": -1 }).limit(100);
-    res.render('all/app', { memes })
+    if(!memes)
+    {
+       res.render('all/Nomeme')
+    }
+    else{
+      res.render('all/app', { memes })
+    }
     }
     catch(err){
         res.status(404).send('404 Not Found');
