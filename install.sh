@@ -3,7 +3,6 @@ echo "deb [ arch=amd64,arm64 ] https://repo.mongodb.org/apt/ubuntu focal/mongodb
 sudo apt update
 sudo apt-get install -y mongodb-org
 sudo systemctl start mongod
-sudo systemctl status mongod
 curl -sL https://deb.nodesource.com/setup_14.x | sudo -E bash -
 sudo apt-get install -y nodejs
 sudo apt install npm
