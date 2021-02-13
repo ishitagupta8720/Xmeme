@@ -26,18 +26,24 @@
 
 
 <body>
+  <!-- Responsive navbar for the homepage -->
     <nav class="navbar navbar-light"style="background-color: #e3f2fd;">
         <div class="container-fluid">
           
           <a class="navbar-brand container ">Xmeme</a>
+          <!-- To upload your meme-->
           <a class="btn btn-primary "  href="/memes/new">Upload your meme</a>
+          <!-- To contact the developer-->
           <a class="btn btn-primary "  href="https://www.linkedin.com/in/ishita-gupta-2604411a9/">Contact Me</a>
+          <!-- Swagger documentation-->
           <a class="btn btn-primary "  href="/swagger-ui/">Swagger</a>
         </div>
       </nav>
     
    
     <div class="row row-cols-1 row-cols-md-3 g-4">
+    
+     <!-- To display all the memes posted-->
     
     <% for(let meme of memes) { %>
        
@@ -72,7 +78,7 @@
     integrity="sha384-pQQkAEnwaBkjpqZ8RU1fF1AKtTcHJwFl3pblpTlHXybJjHpMYo79HY3hIi4NKxyj"
     crossorigin="anonymous"></script>
     
-    <script src="/js/myJS.js"></script>
+    
 </body>
 
 </html>

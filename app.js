@@ -95,6 +95,7 @@ app.use(express.json());
 
 
  // Get route to render html to display all the memes
+ 
 app.get('/memes/all', async(req,res) => {
     try{
     const memes = await Meme.find().sort({ "time": -1 }).limit(100);
